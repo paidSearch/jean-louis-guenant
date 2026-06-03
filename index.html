@@ -434,7 +434,7 @@
     btn.setAttribute('aria-selected', 'true');
   }
 
-  // Message submit — opens Google Form with pre-filled values, then shows confirmation
+  // Message submit — sends to Google Form silently, then shows confirmation
   function submitMessage() {
     var nom = document.getElementById('nom').value.trim();
     var msg = document.getElementById('message').value.trim();
@@ -442,17 +442,12 @@
       document.getElementById('message').focus();
       return;
     }
-    // Google Form prefill URL
-    // entry.xxxxxx = field IDs from your form (update if needed after inspecting the form)
     var baseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-ODblDT0KNyn9-HD9dGu0NjT251Fg9KF3EXE_2IADatSrcA/formResponse';
     var params = new URLSearchParams();
-    // You need to replace these entry IDs with the real ones from your Google Form
-    // To find them: open your form preview, right-click each field, inspect, look for name="entry.XXXXXXX"
-    params.append('entry.NAME_FIELD_ID', nom);
-    params.append('entry.MESSAGE_FIELD_ID', msg);
-    // Submit silently via fetch (no redirect)
+    params.append('entry.286237221', nom);   // Votre nom
+    params.append('entry.1099324459', '');   // Votre prénom (laissé vide, champ fusionné)
+    params.append('entry.844656239', msg);   // Votre message
     fetch(baseUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
-    // Show confirmation immediately
     document.getElementById('form-wrapper').style.display = 'none';
     document.getElementById('msg-success').style.display = 'block';
   }
