@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -352,7 +353,7 @@
 
 <header class="hero">
   <div class="portrait-wrap">
-    <img src="20130610_114315.jpg" alt="Jean-Louis Guénant">
+    <img src="c69971bf-e3d7-496f-ac52-9bee3cfc1901.jpg" alt="Jean-Louis Guénant">
   </div>
   <p class="hero-label">En mémoire de</p>
   <h1 class="hero-name">Jean-Louis Guénant</h1>
@@ -393,18 +394,11 @@
 
   <!-- FLEURS -->
   <div id="panel-fleurs" class="tab-panel" role="tabpanel">
-    <p class="section-intro">Pour ne pas concentrer les livraisons,<br>choisissez une date parmi les créneaux disponibles.</p>
+    <p class="section-intro">Si vous souhaitez envoyer des fleurs à Marie-José,<br>une cagnotte a été ouverte pour lui permettre<br>de les recevoir au fil des semaines —<br>un peu de douceur dans les jours ordinaires qui suivent.</p>
 
-    <div id="slots-wrapper">
-      <div class="slots-grid" id="slots-grid"></div>
-      <button class="btn" id="btn-flowers" style="display:none;" onclick="confirmFlowers()">
-        Confirmer et accéder à la cagnotte →
-      </button>
-    </div>
-
-    <div class="success-box" id="flowers-success">
-      <p>Merci pour votre générosité.<br>Vous allez être redirigé vers la cagnotte.</p>
-    </div>
+    <a class="btn" href="https://www.leetchi.com/PLACEHOLDER" target="_blank" rel="noopener" style="display:block; text-align:center; text-decoration:none;">
+      Contribuer à la cagnotte →
+    </a>
 
     <div class="divider"><span>ou contacter directement</span></div>
 
@@ -463,49 +457,7 @@
     document.getElementById('msg-success').style.display = 'block';
   }
 
-  // Slots
-  var LEETCHI_URL = 'https://www.leetchi.com/PLACEHOLDER'; // ← remplacer par vrai lien Leetchi
-  var selectedSlot = null;
-
-  var ceremonyDate = new Date();
-  ceremonyDate.setHours(0,0,0,0);
-
-  // Simulate some slots taken (in production you'd use a backend or Google Sheet)
-  var slotsTaken = [3, 2, 0, 1, 0, 3, 0, 1, 2, 0];
-  var MAX_PER_DAY = 3;
-
-  var grid = document.getElementById('slots-grid');
-
-  for (var i = 1; i <= 10; i++) {
-    var d = new Date(ceremonyDate);
-    d.setDate(d.getDate() + i);
-    var label = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
-    var taken = slotsTaken[i-1];
-    var full = taken >= MAX_PER_DAY;
-    var avail = full ? 'Complet' : (MAX_PER_DAY - taken) + ' place' + (MAX_PER_DAY - taken > 1 ? 's' : '') + ' disponible' + (MAX_PER_DAY - taken > 1 ? 's' : '');
-
-    var div = document.createElement('div');
-    div.className = 'slot' + (full ? ' full' : '');
-    div.innerHTML = '<div class="slot-date">' + label + '</div><div class="slot-avail">' + avail + '</div>';
-
-    if (!full) {
-      (function(idx, el) {
-        el.addEventListener('click', function() {
-          document.querySelectorAll('.slot').forEach(function(s) { s.classList.remove('selected'); });
-          el.classList.add('selected');
-          selectedSlot = idx;
-          document.getElementById('btn-flowers').style.display = 'block';
-        });
-      })(i, div);
-    }
-    grid.appendChild(div);
-  }
-
-  function confirmFlowers() {
-    document.getElementById('slots-wrapper').style.display = 'none';
-    document.getElementById('flowers-success').style.display = 'block';
-    setTimeout(function() { window.open(LEETCHI_URL, '_blank'); }, 1200);
-  }
+  // Leetchi link is handled directly in the HTML anchor tag
 </script>
 
 </body>
