@@ -34,9 +34,9 @@
 
   /* Portrait */
   .portrait-wrap {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 28px;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 20px;
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -53,17 +53,17 @@
   /* Header */
   .hero {
     text-align: center;
-    padding: 72px 24px 56px;
+    padding: 40px 24px 32px;
     position: relative;
   }
   .hero::after {
     content: '';
     display: block;
     width: 1px;
-    height: 48px;
+    height: 32px;
     background: var(--light);
     margin: 0 auto;
-    margin-top: 48px;
+    margin-top: 28px;
   }
   .hero-label {
     font-family: 'Jost', sans-serif;
@@ -142,7 +142,7 @@
     font-size: 17px;
     color: var(--mid);
     line-height: 1.7;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     text-align: center;
   }
 
@@ -432,6 +432,8 @@
     document.getElementById('panel-' + name).classList.add('active');
     btn.classList.add('active');
     btn.setAttribute('aria-selected', 'true');
+    // Scroll tabs into view on mobile
+    document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // Message submit — redirects to Google Form with pre-filled values
@@ -453,9 +455,11 @@
     // Open prefilled form in new tab — user just clicks Submit on Google's page
     window.open(baseUrl + '?' + params.toString(), '_blank');
 
-    // Show confirmation on our page too
+    // Show confirmation and scroll to it
     document.getElementById('form-wrapper').style.display = 'none';
-    document.getElementById('msg-success').style.display = 'block';
+    var s = document.getElementById('msg-success');
+    s.style.display = 'block';
+    s.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   // Leetchi link is handled directly in the HTML anchor tag
