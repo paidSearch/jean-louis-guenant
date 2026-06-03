@@ -434,7 +434,7 @@
     btn.setAttribute('aria-selected', 'true');
   }
 
-  // Message submit — sends to Google Form silently, then shows confirmation
+  // Message submit — posts to Google Form via hidden iframe to avoid CORS issues
   function submitMessage() {
     var nom = document.getElementById('nom').value.trim();
     var msg = document.getElementById('message').value.trim();
@@ -442,14 +442,49 @@
       document.getElementById('message').focus();
       return;
     }
-    var baseUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSf-ODblDT0KNyn9-HD9dGu0NjT251Fg9KF3EXE_2IADatSrcA/formResponse';
-    var params = new URLSearchParams();
-    params.append('entry.286237221', nom);   // Votre nom
-    params.append('entry.1099324459', '');   // Votre prénom (laissé vide, champ fusionné)
-    params.append('entry.844656239', msg);   // Votre message
-    fetch(baseUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+
+    // Create a hidden iframe as target (absorbs the Google redirect response)
+    var iframeName = 'hidden_iframe_' + Date.now();
+    var iframe = document.createElement('iframe');
+    iframe.name = iframeName;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    // Create a hidden form and submit it into the iframe
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSf-ODblDT0KNyn9-HD9dGu0NjT251Fg9KF3EXE_2IADatSrcA/formResponse';
+    form.target = iframeName;
+    form.style.display = 'none';
+
+    var fields = {
+      'entry.286237221': nom,
+      'entry.1099324459': '',
+      'entry.844656239': msg,
+      'fvv': '1',
+      'fbzx': '755081591802872597'
+    };
+
+    for (var key in fields) {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = fields[key];
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Show confirmation immediately
     document.getElementById('form-wrapper').style.display = 'none';
     document.getElementById('msg-success').style.display = 'block';
+
+    // Cleanup after 5s
+    setTimeout(function() {
+      document.body.removeChild(form);
+      document.body.removeChild(iframe);
+    }, 5000);
   }
 
   // Leetchi link is handled directly in the HTML anchor tag
